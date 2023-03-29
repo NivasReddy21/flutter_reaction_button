@@ -52,7 +52,7 @@ class ReactionButton<T> extends StatefulWidget {
   /// Scale duration while dragging [default = const Duration(milliseconds: 100)]
   final Duration? itemScaleDuration;
 
-  final Reaction noReaction;
+  final Reaction<T> noReaction;
 
   const ReactionButton({
     Key? key,
@@ -81,7 +81,7 @@ class ReactionButton<T> extends StatefulWidget {
 class _ReactionButtonState<T> extends State<ReactionButton<T>> {
   final GlobalKey _buttonKey = GlobalKey();
 
-  Reaction? _selectedReaction;
+  Reaction<T>? _selectedReaction;
 
   void _init() {
     _selectedReaction = widget.initialReaction;
@@ -103,7 +103,9 @@ class _ReactionButtonState<T> extends State<ReactionButton<T>> {
   Widget build(BuildContext context) => GestureDetector(
         key: _buttonKey,
         behavior: HitTestBehavior.translucent,
-        onTapDown: (details) => _showReactionsBox(details.globalPosition),
+        onTapDown: (details) => (_selectedReaction != null)
+            ? _updateReaction(_selectedReaction!)
+            : _showReactionsBox(details.globalPosition),
         onLongPressStart: (details) =>
             _showReactionsBox(details.globalPosition),
         child: (_selectedReaction ?? widget.noReaction).icon,
