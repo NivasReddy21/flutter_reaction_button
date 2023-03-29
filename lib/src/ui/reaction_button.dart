@@ -140,11 +140,10 @@ class _ReactionButtonState<T> extends State<ReactionButton<T>> {
   }
 
   void _updateReaction(Reaction<T> reaction) async {
-    final success = await widget.onReactionChanged.call(
-        _selectedReaction?.value == reaction.value ? null : reaction.value);
-
+    final success = await widget.onReactionChanged
+        .call(_selectedReaction != null ? null : reaction.value);
     if (mounted && widget.shouldChangeReaction && success) {
-      if (_selectedReaction?.value == reaction.value) {
+      if (_selectedReaction != null) {
         setState(() {
           _selectedReaction = null;
         });
